@@ -1,0 +1,16 @@
+clc
+clear all
+close all
+%% Load data
+load('../output/energy.mat')
+%% Calculate average node energy for all subjects
+nodeAvg = zeros(size(energy,1));
+for i=1:length(energy)
+    x = energy(:,:,:,i); % look at one subject
+    xr = bsxfun(@rdivide,tiedrank(x),nanmax(tiedrank(x))); %Divide by number of nodes to standardize
+        for j=1:length(xr)
+        nodeAvg(j, i) = nanmean(xr(j,:)); % store values for all subjects and nodes
+        end
+end
+[~,I] = max(nodeAvg);
+N = histcounts(I,214);
